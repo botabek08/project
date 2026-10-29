@@ -1,0 +1,10 @@
+def trajectory_tracking_controller(T, X, t):
+    # steps 1 + 2: first pose with time stamp >= t + Delta t (else the last pose)
+    t_des = t + TRAJ_LOOKAHEAD_S
+    p_des = T[-1]
+    for p in T:
+        if p[0] >= t_des:
+            p_des = p
+            break
+    # step 3: point tracking to p_des ([t, x, y, theta] -> [x, y, theta])
+    return point_tracking_controller(p_des[1:], X)
