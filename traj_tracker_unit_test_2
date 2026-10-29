@@ -1,0 +1,13 @@
+def traj_tracker_unit_test_2():
+    load_map("terrain_sim")
+    X = [0.0, 0.0, 0.0]
+    P = A_star_planner(meters_to_cell(X[0], X[1]), meters_to_cell(1.5, 0.0), "time")
+    T = path_to_trajectory(P, "time") if P else None
+    if not T:
+        print("  terrain_sim: A_star_planner or path_to_trajectory not written yet")
+        return False, [], []
+    reached, visited, t, max_err = simulate_trajectory(T, X)
+    hit = any(robot_in_collision(p) for p in visited)
+    print(f"  terrain_sim: planned {T[-1][0]:.1f} s, took {t:.1f} s, "
+          f"max tracking error {max_err:.3f} m, collision {hit}")
+    return reached and not hit, T, visited
